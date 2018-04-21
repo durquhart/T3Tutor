@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script src="HidMap.js"></script>
+<script src="ConfigV5.js"></script>
+<title>Twiddlede Type</title>
+<style type='text/css'>
+body {
+    font-family: sans-serif;
+}
+</style>
+<script type='text/javascript'>
+
+    function loadFile() {
+        var input, file, fr;
+
+        if (typeof window.FileReader !== 'function') {
+            bodyAppend("p", "The file API isn't supported on this browser.");
+            return;
+        }
+
+        input = document.getElementById('fileinput');
+        if (!input) {
+            bodyAppend("p", "Couldn't find the fileinput element.");
+        }
+        else if (!input.files) {
+            bodyAppend("p", "This browser doesn't seem to support the `files` property of file inputs.");
+        }
+        else if (!input.files[0]) {
+            bodyAppend("p", "Please select a file before clicking 'Load'");
+        }
+        else {
+            file = input.files[0];
+            fr = new FileReader();
+            fr.onload = receivedBinary;
+            fr.readAsBinaryString(file);
+        }
+
+        function receivedBinary() {
+			var tConfig = new TwiddlerConfigV5(fr.result);
+			//bodyAppend("pre","Header<br\>"+JSON.stringify(tConfig.header,null,2));
+			//bodyAppend("pre","Chord Table<br\>"+JSON.stringify(tConfig.chords,null,2));
+			console.log(JSON.stringify(tConfig.toChord, null, 2));
+
+			for(l of "Daniel")
+			{
+			console.log(l);
+				var c = tConfig.toChord[l];
+				if(c)
+				{
+					bodyAppend("pre",l+"<br\>"+JSON.stringify(c,null,2));
+				}
+			}
+        }
+    }
+
+
+
+    function bodyAppend(tagName, innerHTML) {
+        var elm;
+
+        elm = document.createElement(tagName);
+        elm.innerHTML = innerHTML;
+        document.body.appendChild(elm);
+    }
+
+</script>
+</head>
+<body>
+<form action='#' onsubmit="return false;">
+<input type='file' id='fileinput'>
+<input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
+</form>
+</body>
+</html>
