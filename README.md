@@ -7,6 +7,7 @@ This project is not affiliated with Tek Gear and is released under the GNU GENER
 
 This project supports loading custom configurations directly from the binary [twiddler.cfg V5 Config File](http://twiddler.tekgear.com/doc/static/twiddler3_config_format_v5_rev0.pdf).
 
+You can give it a try at [https://durquhart.github.io/T3Tutor/learn.html](https://durquhart.github.io/T3Tutor/learn.html)
 
 Configuration Support Goals:
  - [x] Loading binary .cfg file header & key mappings
@@ -16,8 +17,8 @@ Configuration Support Goals:
 
 Typing Tutor Support Goals:
  - [x] Visualize chords
- - [ ] Show chord for next character to type 
- - [ ] Accept input and advance to next character
+ - [x] Show chord for next character to type 
+ - [x] Accept input and advance to next character
  - [ ] Support loading text to type from a file/web
  - [ ] ....
 
