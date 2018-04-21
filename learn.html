@@ -41,7 +41,7 @@ body {
 			var tConfig = new TwiddlerConfigV5(fr.result);
 			//bodyAppend("pre","Header<br\>"+JSON.stringify(tConfig.header,null,2));
 			//bodyAppend("pre","Chord Table<br\>"+JSON.stringify(tConfig.chords,null,2));
-			console.log(JSON.stringify(tConfig.toChord, null, 2));
+			//console.log(JSON.stringify(tConfig.toChord, null, 2));
 
 			for(l of "Daniel")
 			{
@@ -49,7 +49,8 @@ body {
 				var c = tConfig.toChord[l];
 				if(c)
 				{
-					bodyAppend("pre",l+"<br\>"+JSON.stringify(c,null,2));
+					//bodyAppend("pre",l+"<br\>"+JSON.stringify(c,null,2));
+					bodyAppend("pre",l+"<br\>"+tConfig.prettyChord(c.chord));
 				}
 			}
         }

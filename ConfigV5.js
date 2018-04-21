@@ -69,10 +69,15 @@ TwiddlerConfigV5.prototype.parseHeader = function(byteReader)
 		return header;
 };
 
+TwiddlerConfigV5.prototype.buttonTemplate = function()
+{
+		return[ ["Num","Alt","CTL","SFT"],["A","E","SP"],["B","F","DEL"],["C","G","BS"],["D","H","ENT"]];
+}
+
 TwiddlerConfigV5.prototype.decodeChord = function(word)
 {
 	
-	chord = [ ["Num","Alt","Ctrl","Shft"],["","",""],["","",""],["","",""],["","",""]];
+	chord = this.buttonTemplate();
 	for(i = 0; i < 16; i++)
 	{
 		val = (word & (0x01<<i)) != 0;
@@ -85,9 +90,27 @@ TwiddlerConfigV5.prototype.decodeChord = function(word)
 			chord[1+(i>>2)][(i%4)-1] = val;
 		}
 	}
-	result = {};
-	result.chord = chord;
-	return result;
+	return chord;
+};
+
+TwiddlerConfigV5.prototype.prettyChord = function(chord)
+{
+	template = this.buttonTemplate();
+	
+	result =[];
+	for(var r = 0; r < chord.length; r++)
+	{
+		var row = chord[r];
+		result.push("|");
+		for(var c = 0; c < row.length; c++)
+		{
+			var txt = row[c]?(r==0?template[r][c]:"X"):" "
+			result.push(txt);
+			result.push("|");
+		}
+		result.push("\n");//-------\n");
+	}
+	return result.join("");
 };
 	
 
