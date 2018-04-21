@@ -1,4 +1,10 @@
 <!DOCTYPE HTML>
+<!--
+Copyright 2018 Daniel Urquhart
+Released under the GNU GENERAL PUBLIC LICENSE Version 3. The author reserves the right to dual-license in the future.
+
+This project is not affiliated with Tek Gear.
+-->
 <html>
 <head>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
@@ -21,14 +27,11 @@ body {
         }
 
         input = document.getElementById('fileinput');
-        if (!input) {
-            bodyAppend("p", "Couldn't find the fileinput element.");
-        }
-        else if (!input.files) {
-            bodyAppend("p", "This browser doesn't seem to support the `files` property of file inputs.");
+        if (!input.files) {
+            bodyAppend("p", "This browser doesn't support the `files` property of file inputs.");
         }
         else if (!input.files[0]) {
-            bodyAppend("p", "Please select a file before clicking 'Load'");
+            bodyAppend("p", "Please select a file before clicking 'Load'","visTag");
         }
         else {
             file = input.files[0];
@@ -38,30 +41,57 @@ body {
         }
 
         function receivedBinary() {
-			var tConfig = new TwiddlerConfigV5(fr.result);
-			//bodyAppend("pre","Header<br\>"+JSON.stringify(tConfig.header,null,2));
-			//bodyAppend("pre","Chord Table<br\>"+JSON.stringify(tConfig.chords,null,2));
-			//console.log(JSON.stringify(tConfig.toChord, null, 2));
-
-			for(l of "Daniel")
-			{
-			console.log(l);
-				var c = tConfig.toChord[l];
-				if(c)
-				{
-					//bodyAppend("pre",l+"<br\>"+JSON.stringify(c,null,2));
-					bodyAppend("pre",l+"<br\>"+tConfig.prettyChord(c.chord));
-				}
-			}
-        }
+			tConfig = new TwiddlerConfigV5(fr.result);
+			/*global*/inputPosition = 0;
+			updateNextChar();
+		}
     }
+	function updateNextChar(){
+		var text = document.getElementById("toType").value;
+		var l = text.charAt(inputPosition);
+		var c = tConfig.toChord[l];
+		
+		var text = document.getElementById("toType").value;
+		if(inputPosition >= text.length)
+		{
+			bodyAppend("pre","Done","visTag");
+			return;
+		}
+		
+		text = text.slice(0,inputPosition) + "<b>"+ text.charAt(inputPosition)+"</b>"+text.slice(inputPosition+1);
+		
+		if(c)
+		{
+			bodyAppend("pre",text+"<br>"+l+"<br\>"+tConfig.prettyChord(c.chord), "visTag");
+		}
+		document.getElementById("cursorInput").focus()
+	}
+		
+	function handleKey(){
+		var input = document.getElementById("cursorInput");
+		var text = document.getElementById("toType").value;
+		var c = input.value;
+		if(c == text.charAt(inputPosition))
+		{
+			inputPosition++;
+		}
+		updateNextChar();
+		input.value = "";
+	}
 
-
-
-    function bodyAppend(tagName, innerHTML) {
+    function bodyAppend(tagName, innerHTML, id) {
         var elm;
 
-        elm = document.createElement(tagName);
+		if(id){
+			elm = document.getElementById(id);
+			if(!elm){
+				elm = document.createElement(tagName);
+				elm.id = id;
+			}
+		}
+		else{
+			 elm = document.createElement(tagName);
+		}
         elm.innerHTML = innerHTML;
         document.body.appendChild(elm);
     }
@@ -69,9 +99,19 @@ body {
 </script>
 </head>
 <body>
+<h1>T3 Tutor</h1>
+To use the tutor:
+<ul>
+<li> Select config file for your device</li>
+<li> Enter the practice text in the area below</li>
+<li> Click Start</li>
+<li> Start typing</li>
+</ul>
 <form action='#' onsubmit="return false;">
-<input type='file' id='fileinput'>
-<input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
+Config File: <input type='file' id='fileinput'/><br/>
+Input Text: <textarea rows="5" cols="50" id='toType'>i learn to type</textarea><br/>
+<input type='button' id='btnLoad' value='Start' onclick='loadFile();'><br/>
+Cursor Here: <input type='text' id='cursorInput' onkeyup="handleKey()"/>
 </form>
 </body>
 </html>

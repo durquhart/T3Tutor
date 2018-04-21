@@ -68,7 +68,7 @@ HidMap.prototype.initData = function()
 	this.hidMap[0x29] = ["ESCAPE"];
 	this.hidMap[0x2A] = ["DELETE (Backspace)"];
 	this.hidMap[0x2B] = ["Tab"];
-	this.hidMap[0x2C] = ["Spacebar"];
+	this.hidMap[0x2C] = [" "];
 	this.hidMap[0x2D] = ["-","(underscore)"];
 	this.hidMap[0x2E] = ["=","+"];
 	this.hidMap[0x2F] = ["[","{"];

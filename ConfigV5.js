@@ -24,8 +24,9 @@ function TwiddlerConfigV5(byteString)
 			}
 			for(a of c.text)
 			{
-				//console.log(c.text);
-				if(! this.toChord[a])
+				//don't overwrite - except prefer no modifier
+				if(!this.toChord[a]||
+				this.toChord[a].modifier > c.modifier)
 				{
 					this.toChord[a] = c;
 				}
@@ -101,12 +102,12 @@ TwiddlerConfigV5.prototype.prettyChord = function(chord)
 	for(var r = 0; r < chord.length; r++)
 	{
 		var row = chord[r];
-		result.push("|");
+		result.push(r==0?"":"|");
 		for(var c = 0; c < row.length; c++)
 		{
 			var txt = row[c]?(r==0?template[r][c]:"X"):" "
 			result.push(txt);
-			result.push("|");
+			result.push(r==0?"":"|");
 		}
 		result.push("\n");//-------\n");
 	}
