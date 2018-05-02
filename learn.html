@@ -48,6 +48,7 @@ body {
     }
 	function updateNextChar(){
 		var text = document.getElementById("toType").value;
+		var hintDelay = document.getElementById("hintDelay").value*1000;
 		var l = text.charAt(inputPosition);
 		var c = tConfig.toChord[l];
 		
@@ -62,7 +63,16 @@ body {
 		
 		if(c)
 		{
-			bodyAppend("pre",text+"<br>"+l+"<br\>"+tConfig.prettyChord(c.chord), "visTag");
+			bodyAppend("pre",text+"<br>"+l, "visTag");
+			bodyAppend("pre","", "hintTag");
+			setTimeout(function(oldInputPosition){
+				if(inputPosition == oldInputPosition)
+					bodyAppend("pre",tConfig.prettyChord(c.chord), "hintTag");
+			}, hintDelay,inputPosition);
+		}
+		else{
+			inputPosition++;
+			updateNextChar();
 		}
 		document.getElementById("cursorInput").focus()
 	}
@@ -110,8 +120,9 @@ To use the tutor:
 <form action='#' onsubmit="return false;">
 Config File: <input type='file' id='fileinput'/><br/>
 Input Text: <textarea rows="5" cols="50" id='toType'>i learn to type</textarea><br/>
+Hint Delay: <input type="number" id="hintDelay" value ="0.5" min="0" max="5" step="0.1"> seconds<br/>
 <input type='button' id='btnLoad' value='Start' onclick='loadFile();'><br/>
-Cursor Here: <input type='text' id='cursorInput' onkeyup="handleKey()"/>
+Cursor Here: <input type='text' id='cursorInput' onkeyup="handleKey()"/><br/>
 </form>
 </body>
 </html>
